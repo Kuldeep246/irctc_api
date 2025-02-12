@@ -179,4 +179,33 @@
         {
             "error": "string"
         }
+
+### User Routes (`/user`)
+*   **`GET /user/:id`:** Gets user details. Requires user authentication.
+    *   **Output (Success):**
+        ```json
+        {
+            "username": "string"
+        }
         
+    *   **Output (Error):**
+        ```json
+        {
+            "error": "string"
+        }
+        
+*   **`GET /user/:id/booking`:** Gets all booking details for a user. Requires user authentication.
+    *   **Output (Success):**
+        ```json
+        [
+            {
+                "train_id": "integer"
+            }
+        ]
+        
+    *   **Output (Error):**
+        ```json
+        {
+            "error": "string"
+        }
+       
