@@ -76,7 +76,7 @@ This project is a simplified version of the IRCTC system, designed to demonstrat
 
 2.  **Access the API:**
 
-    The API endpoints are documented in the [API_DOCUMENTATION.md](https://github.com/Kuldeep246/irctc_api/blob/main/API_DOCUMENTATION.md) file. You can use tools like `curl`, Postman, or Insomnia to interact with the API.
+    The API endpoints are documented in the `API_DOCUMENTATION.md` file. You can use tools like `curl`, Postman, or Insomnia to interact with the API.
 
 ### [API_DOCUMENTATION.md](https://github.com/Kuldeep246/irctc_api/blob/main/API_DOCUMENTATION.md).
 
