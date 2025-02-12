@@ -63,6 +63,42 @@ This project is a simplified version of the IRCTC system, designed to demonstrat
 *   express: For creating the web server and handling routes.
 *   jsonwebtoken: For creating and verifying JSON Web Tokens (JWTs).
 *   mysql2: For connecting to the MySQL database.
+## SQL schema
+  ```bash
+    CREATE DATABASE IF NOT EXISTS irctc;
+    USE irctc;
+    
+    CREATE TABLE IF NOT EXISTS users (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        username VARCHAR(100) UNIQUE NOT NULL,
+        password TEXT NOT NULL
+    );
+    
+    CREATE TABLE IF NOT EXISTS admins (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        username VARCHAR(100) UNIQUE NOT NULL,
+        password TEXT NOT NULL
+    );
+    
+    CREATE TABLE IF NOT EXISTS trains (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        train_number VARCHAR(50) UNIQUE NOT NULL,
+        source VARCHAR(100) NOT NULL,
+        destination VARCHAR(100) NOT NULL,
+        total_seats INT NOT NULL,
+        available_seats INT NOT NULL
+    );
+    
+    CREATE TABLE IF NOT EXISTS bookings (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        user_id INT,
+        train_id INT,
+        seats INT,
+        booking_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+        FOREIGN KEY (train_id) REFERENCES trains(id) ON DELETE CASCADE
+    );
+  ```
 
 ## Usage
 
@@ -78,6 +114,6 @@ This project is a simplified version of the IRCTC system, designed to demonstrat
 
     The API endpoints are documented in the `API_DOCUMENTATION.md` file. You can use tools like `curl`, Postman, or Insomnia to interact with the API.
 
-### [API_DOCUMENTATION.md](https://github.com/Kuldeep246/irctc_api/blob/main/API_DOCUMENTATION.md).
+## [API_DOCUMENTATION.md](https://github.com/Kuldeep246/irctc_api/blob/main/API_DOCUMENTATION.md).
 
 
