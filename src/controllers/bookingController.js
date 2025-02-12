@@ -1,38 +1,48 @@
 const db = require('../config/db');
 
 const bookSeat = async (req, res) => {
+    const connection = await db.getConnection();
     try {
+        await connection.beginTransaction();
+
         const { trainId } = req.params;
         const userId = req.user.id;
         const seats = req.body.seats;
 
-        const [train] = await db.query(
-            'SELECT available_seats FROM trains WHERE id = ?',
+        const [trains] = await connection.query(
+            'SELECT available_seats FROM trains WHERE id = ? FOR UPDATE',
             [trainId]
         );
 
-        if (!train || train.available_seats < seats) {
+        if (trains.length === 0 || trains[0].available_seats < seats) {
+            await connection.rollback();
             return res.status(400).json({ error: 'Not enough available seats' });
         }
 
-        const [result] = await db.query(
-            'UPDATE trains SET available_seats = available_seats - ? WHERE id = ? AND available_seats >= ?',
-            [seats, trainId, seats]
+        const [updateResult] = await connection.query(
+            'UPDATE trains SET available_seats = available_seats - ? WHERE id = ?',
+            [seats, trainId]
         );
 
-        if (result.affectedRows === 0) {
+        if (updateResult.affectedRows === 0) {
+            await connection.rollback();
             return res.status(400).json({ error: 'No available seats after update' });
         }
 
-        const [booking] = await db.query(
+        const [booking] = await connection.query(
             'INSERT INTO bookings (user_id, train_id, seats) VALUES (?, ?, ?)',
             [userId, trainId, seats]
         );
 
+        await connection.commit(); 
         res.json({ message: 'Seat(s) booked successfully', bookingId: booking.insertId });
+
     } catch (error) {
+        await connection.rollback(); 
         console.error(error);
         res.status(500).json({ error: error.message });
+    } finally {
+        connection.release(); 
     }
 };
 
@@ -52,43 +62,54 @@ const getBookingDetails = async (req, res) => {
     }
 };
 const cancelBooking = async (req, res) => {
+    const connection = await db.getConnection();
     try {
+        await connection.beginTransaction();
+
         const { bookingId } = req.params;
         const userId = req.user.id;
 
-        const [booking] = await db.query(
-            'SELECT train_id, seats FROM bookings WHERE id = ? AND user_id = ?',
+        const [bookings] = await connection.query(
+            'SELECT train_id, seats FROM bookings WHERE id = ? AND user_id = ? FOR UPDATE',
             [bookingId, userId]
         );
 
-        if (!booking) {
+        if (bookings.length === 0) {
+            await connection.rollback();
             return res.status(400).json({ error: 'Booking not found or not authorized' });
         }
 
-        const { train_id, seats } = booking;
+        const { train_id, seats } = bookings[0];
 
-        const [result] = await db.query(
+        const [updateSeats] = await connection.query(
             'UPDATE trains SET available_seats = available_seats + ? WHERE id = ?',
             [seats, train_id]
         );
 
-        if (result.affectedRows === 0) {
+        if (updateSeats.affectedRows === 0) {
+            await connection.rollback();
             return res.status(400).json({ error: 'Error updating train seats' });
         }
 
-        const [deleteBooking] = await db.query(
+        const [deleteBooking] = await connection.query(
             'DELETE FROM bookings WHERE id = ? AND user_id = ?',
             [bookingId, userId]
         );
 
         if (deleteBooking.affectedRows === 0) {
+            await connection.rollback();
             return res.status(400).json({ error: 'Error deleting booking' });
         }
 
+        await connection.commit();
         res.json({ message: 'Booking canceled successfully' });
+
     } catch (error) {
+        await connection.rollback();
         console.error(error);
         res.status(500).json({ error: error.message });
+    } finally {
+        connection.release();
     }
 };
 
