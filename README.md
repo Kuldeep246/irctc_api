@@ -1,8 +1,8 @@
-# IRCTC Clone - README.md
+# IRCTC API - README.md
 
 ## Project Overview
 
-This project is a simplified clone of the IRCTC system, designed to demonstrate a basic train booking platform. It allows users to register, log in, book train seats, and cancel bookings. Administrators have the ability to manage train schedules.  This version focuses on the backend API.
+This project is a simplified version of the IRCTC system, designed to demonstrate a basic train booking platform. It allows users to register, log in, book train seats, and cancel bookings. Administrators have the ability to manage train schedules.  This version focuses on the backend API.
 
 ## Key Features
 
