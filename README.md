@@ -25,7 +25,7 @@ This project is a simplified version of the IRCTC system, designed to demonstrat
 1.  **Clone the repository:**
 
     ```bash
-    git clone [https://github.com/Kuldeep246/irctc_api.git](https://github.com/Kuldeep246/irctc_api.git)  # Replace with your actual repo URL
+    git clone https://github.com/Kuldeep246/irctc_api.git
     ```
 
 2.  **Install dependencies:**
