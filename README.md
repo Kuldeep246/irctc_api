@@ -65,22 +65,22 @@ This project is a simplified version of the IRCTC system, designed to demonstrat
 *   mysql2: For connecting to the MySQL database.
 ## SQL schema
   ```bash
-    CREATE DATABASE IF NOT EXISTS irctc;
+    CREATE DATABASE irctc;
     USE irctc;
     
-    CREATE TABLE IF NOT EXISTS users (
+    CREATE TABLE users (
         id INT AUTO_INCREMENT PRIMARY KEY,
         username VARCHAR(100) UNIQUE NOT NULL,
         password TEXT NOT NULL
     );
     
-    CREATE TABLE IF NOT EXISTS admins (
+    CREATE TABLE admins (
         id INT AUTO_INCREMENT PRIMARY KEY,
         username VARCHAR(100) UNIQUE NOT NULL,
         password TEXT NOT NULL
     );
     
-    CREATE TABLE IF NOT EXISTS trains (
+    CREATE TABLE trains (
         id INT AUTO_INCREMENT PRIMARY KEY,
         train_number VARCHAR(50) UNIQUE NOT NULL,
         source VARCHAR(100) NOT NULL,
@@ -89,7 +89,7 @@ This project is a simplified version of the IRCTC system, designed to demonstrat
         available_seats INT NOT NULL
     );
     
-    CREATE TABLE IF NOT EXISTS bookings (
+    CREATE TABLE bookings (
         id INT AUTO_INCREMENT PRIMARY KEY,
         user_id INT,
         train_id INT,
